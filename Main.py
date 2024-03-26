@@ -28,17 +28,21 @@ def cadastro(nome: str, user: str, senha: str):
 def login(usuario: str, senha: str):
     session = conectaBanco()
     user = session.query(Pessoas).filter_by(usuario=usuario, senha=senha).all()
-    if len(usuario) == 0:
+    if len(user) == 0:
         return {'status': 'usuario inexistente'}
     
     while True:
         token = token_hex(50)
-        tokenExiste = session.query(Tokens).filter_by(token=Tokens).all()
+        tokenExiste = session.query(Tokens).filter_by(token=token).all()
         if len(tokenExiste) == 0:
             pessoaExiste = session.query(Tokens).filter_by(id_pessoa=user[0].id).all()
             if len(pessoaExiste) == 0:
                 novoToken = Tokens(id_pessoa=user[0].id, token=token)
                 session.add(novoToken)
-                session.commit()
+            elif len(pessoaExiste) > 0:
+                pessoaExiste[0].token = token
                 
+            session.commit()
             break
+    return token
+            
