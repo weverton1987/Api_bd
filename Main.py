@@ -1,8 +1,8 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from  datetime import datetime 
-import DateTime 
+import datetime 
+
 
 
 USUARIO = 'root'
@@ -30,5 +30,5 @@ class Tokens(Base):
     id = Column(Integer, primary_key=True)
     id_pessoa = Column(Integer, ForeignKey('Pessoa.id'))
     token = Column(String(100))
-    data = Column(DateTime, default=datetime.utcnow()) 
+    data = Column(DateTime, default=datetime.datetime.utcnow()) 
 Base.metadata.create_all(engine)
